@@ -1,0 +1,18 @@
+# Archivos PDF
+################
+*.pdf
+
+# Archivos LOG
+################
+*.log
+
+# Carpetas
+################
+writable/backups
+writable/logs/*
+writable/debugbar/*
+writable/session/*
+writable/debugbar/*.json
+
+/public/img_dni
+.env

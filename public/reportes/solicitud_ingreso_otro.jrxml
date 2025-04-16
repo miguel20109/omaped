@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solicitud_ingreso_otro" language="groovy" pageWidth="595" pageHeight="842" columnWidth="517" leftMargin="42" rightMargin="36" topMargin="34" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="REPORT_URL_IMG" class="java.lang.String"/>
+	<parameter name="id" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+ a.numero
+,a.IDdifunto
+,concat(b.apaterno,' ',b.amaterno,' ',b.nombres) as difunto
+,b.direccion as direccion_difunto
+,a.IDsolicitante
+,concat(c.apaterno,' ',c.amaterno,' ',c.nombres) as declarante
+,c.direccion as direccion_declarante
+,DATE_FORMAT(b.fecha_fallecimiento, "%d/%m/%Y") as fecha_fallecimiento
+,d.descripcion as cementerio
+,e.descripcion as sepultura
+,DATE_FORMAT(a.created_at, "%d") as fecha_dia
+,mes(a.created_at, 'es_PE') as fecha_mes
+,DATE_FORMAT(a.created_at, "%Y") as fecha_anio
+,c.telefono
+FROM solicitudes a
+inner join personas b on a.IDdifunto=b.dni
+inner join personas c on a.IDsolicitante=c.dni
+left join cementerios d on a.idcementerio=d.id
+left join sepultura e on a.idsepultura=e.id
+where a.id=$P{id}
+;]]>
+	</queryString>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IDdifunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="difunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="direccion_difunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IDsolicitante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="declarante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="direccion_declarante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_fallecimiento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cementerio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sepultura" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_dia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_mes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_anio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="dni_difunto">
+		<groupExpression><![CDATA[$F{IDdifunto}]]></groupExpression>
+		<groupHeader>
+			<band height="627">
+				<textField>
+					<reportElement x="50" y="0" width="320" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["MUNICIPALIDAD DISTRITAL DE COMAS"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="50" y="19" width="320" height="10"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["GERENCIA DE LA MUJER DESARROLLO SOCIAL Y PROGRAMAS SOCIALES"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="50" y="28" width="320" height="10"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["SUBGERENCIA DE CIAM, OMAPED, DEMUNA, SALUD Y PROGRAMAS SOCIALES"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="57" width="517" height="21"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["SOLICITO: AUTORIZACIÓN DE INGRESO DE CADÁVER DE OTRO CEMENTERIO"]]></textFieldExpression>
+				</textField>
+				<image scaleImage="FillFrame" onErrorType="Icon">
+					<reportElement x="0" y="0" width="45" height="45"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/escudo.png"]]></imageExpression>
+				</image>
+				<textField>
+					<reportElement x="225" y="480" width="292" height="14"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Comas, "+$F{fecha_dia}+" de "+$F{fecha_mes}+" del "+$F{fecha_anio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="582" width="173" height="12"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Firma"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="580" width="173" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Dashed"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="0" y="106" width="517" height="38"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Yo, <i>"+$F{declarante}+"</i> Identificado (a) con D.N.I. N° <i>"+$F{IDsolicitante}+"</i> domiciliado en <i>"+$F{direccion_declarante}+"</i> Teléfono <i>"+$F{telefono}+"</i>"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="398" y="24" width="119" height="14" forecolor="#FF3300"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["N°"+$F{numero}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="84" width="517" height="17"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Señor Alcalde de la Municipalida Distrital de Comas"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="145" width="517" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Ante usted con el debido respeto me presento y expongo:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="206" width="517" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false" isItalic="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Sepultura <i>"+$F{sepultura}+"</i> en el Cementerio Municipal:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="163" width="517" height="42"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Que deseando trasladar los restos Q.E.V.F. <i>" + $F{difunto} +"</i> Fallecido el dia, <i>" + $F{fecha_fallecimiento} + "</i>."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="239" width="517" height="28"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Arial" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Solicito se sirva otorgarme autorización para lo cual cumplo con adjuntar los siguientes documentos:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="273" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["1. Solicitud dirigida al Alcalde"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="289" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["2. Acta de Defunción original"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="305" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["3. Autorización original del Ministerio de Salud"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="340" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["5. Constancia de Inhumación original"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="356" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["6. Copia de D.N.I. del solicitante"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="424" width="517" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Por lo Expuesto:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="440" width="517" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Sr. Alcalde espero acceda a mi petición; en señal de conformidad firmo el presente documento."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="225" y="582" width="91" height="12"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Huella Dactilar"]]></textFieldExpression>
+				</textField>
+				<rectangle radius="6">
+					<reportElement x="238" y="508" width="68" height="72"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="370" y="273" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="370" y="289" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="370" y="339" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement x="60" y="222" width="457" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cementerio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="372" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["7. Constancia de aceptación del cementerio a trasladar"]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="370" y="355" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement x="0" y="610" width="517" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["(**) En el caso de sepulturas que no cuenten con orden de inhumación"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="26" y="388" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["6. Recibo de pago"]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="370" y="371" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="370" y="387" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="370" y="305" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement x="26" y="322" width="306" height="15"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="11" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["4. Croquis original de ubicación de sepultura"]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="370" y="322" width="38" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+			</band>
+		</groupHeader>
+	</group>
+	<pageFooter>
+		<band height="123">
+			<line>
+				<reportElement x="0" y="75" width="517" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="0" y="100" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Teléfono: (01) 542-7607 / (01) 542-7661"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="78" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Centro Cívico Municipal: Av. 22 de agosto s/n Cdra. 8 Urb. Santa Luzmila, Alt. Av. Universitaria-Cdra. 63"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="89" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Palacio Municipal: Av. España s/n, Plaza de Armas, P.J. La Libertad, Av. Túpac Amaru-Km 11"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="111" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["www.municomas.gob.pe"]]></textFieldExpression>
+			</textField>
+			<rectangle radius="6">
+				<reportElement x="0" y="3" width="517" height="67"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="5" y="4" width="507" height="66"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["ESTA PROHIBIDO EL USO DE FLOREROS O RECIPIENTES CON AGUA PARA LA CONSERVACIÓN DE FLORES EN LOS CEMENTERIOS MUNICIPALES. SE DEBE USAR RECIPIENTES CON ARENA HÚMEDA Y SE RECOMIENDA EL USO DE FLORES ARTIFICIALES<br>(ORDENANZA N°155 C/MC)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

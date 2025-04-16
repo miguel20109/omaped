@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_ingresos" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="tramite" class="java.lang.String"/>
+	<parameter name="mes" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+ ROW_NUMBER() OVER (ORDER BY numero ) as item
+,expediente
+,DATE_FORMAT(fecha_expediente, "%d/%m/%Y") as fecha_expediente
+,CONVERT(concat(b.apaterno,' ',b.amaterno,' ',b.nombres) USING utf8) as solicitante
+,CONVERT(concat(c.apaterno,' ',c.amaterno,' ',c.nombres) USING utf8) as difunto
+,recibo
+,DATE_FORMAT(fecha_pago, "%d/%m/%Y") as fecha_pago
+,a.monto
+,d.descripcion as cementerio
+,a.idtramite
+,e.descripcion as tramite
+,a.numero
+,mes(a.created_at, 'es_PE') as mes
+FROM solicitudes a
+inner join personas b on a.idsolicitante=b.dni
+inner join personas c on a.iddifunto=c.dni
+left  join cementerios d on a.idcementerio=d.id
+left  join tramite e on a.idtramite=e.id
+WHERE a.idtramite=$P{tramite} and a.estado in(1 ,2) and DATE_FORMAT(a.created_at, "%m")=$P{mes} and DATE_FORMAT(a.created_at, '%Y')=$P{anio};]]>
+	</queryString>
+	<field name="item" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="expediente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_expediente" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="solicitante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="difunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="recibo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_pago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cementerio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idtramite" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tramite" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="monto_1" class="java.math.BigDecimal" resetType="Group" resetGroup="tramite" calculation="Sum">
+		<variableExpression><![CDATA[$F{monto}]]></variableExpression>
+	</variable>
+	<group name="tramite" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{idtramite}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField>
+					<reportElement x="149" y="4" width="211" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Solicitante"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="360" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="363" y="4" width="207" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Difunto"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="569" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="570" y="4" width="62" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Comprobante"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="632" y="4" width="47" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Pago"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="631" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="680" y="4" width="30" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Monto"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="679" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="710" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="711" y="4" width="91" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Cementerio"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="801" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="26" y="4" width="50" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Expediente"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="98" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="99" y="4" width="48" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Fecha"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="147" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="0" y="4" width="24" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Item"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="3" width="802" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="0" y="23" width="802" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="24" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="0" y="4" width="1" height="19"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="16">
+				<textField>
+					<reportElement x="570" y="0" width="62" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["TOTAL"]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;-#,##0.00">
+					<reportElement x="629" y="0" width="78" height="15"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{monto_1}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="631" y="0" width="1" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="710" y="0" width="1" height="15"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="570" y="15" width="140" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="569" y="0" width="1" height="16"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineColor="#666666"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="802" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["INGRESOS ECONOMICOS DE LOS CEMENTERIOS DE LA MUNICIPALIDAD DE COMAS DEL MES DE "+$F{mes}.toUpperCase()+"-"+$P{anio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="802" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tramite}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="1" width="19" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="16" width="802" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="24" y="0" width="1" height="16"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="16"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="98" y="0" width="1" height="16"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="26" y="1" width="72" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{expediente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="99" y="1" width="48" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha_expediente}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="147" y="0" width="1" height="16"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="151" y="1" width="209" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{solicitante}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="360" y="0" width="1" height="16"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="363" y="1" width="206" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{difunto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="569" y="0" width="1" height="17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="573" y="1" width="59" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{recibo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="632" y="1" width="47" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha_pago}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="631" y="0" width="1" height="17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="680" y="1" width="30" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="679" y="0" width="1" height="17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="710" y="0" width="1" height="17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="714" y="1" width="87" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cementerio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="801" y="0" width="1" height="17"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#666666"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

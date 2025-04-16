@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&display=swap');
+
+:root {
+    --font-principal: 'Poppins', sans-serif;
+
+    --font-weight-thin: 100;
+    /* Thin or Hairline */
+    --font-weight-extra-light: 200;
+    /* Extra Light or Ultra Light */
+    --font-weight-light: 300;
+    /* Light */
+    --font-weight-normal: 400;
+    /* Normal or Regular */
+    --font-weight-medium: 500;
+    /* Medium */
+    --font-weight-semi-bold: 600;
+    /* Semi Bold or Demi Bold */
+    --font-weight-bold: 700;
+    /* Bold */
+    --font-weight-extra-bold: 800;
+    /* Extra Bold or Ultra Bold */
+    --font-weight-black: 900;
+    /* Black or Heavy */
+
+    --font-color: #333;
+    --font-color-blue: #0575E6;
+    --color-hover-btn: #005DEE;
+    --font-color-white: #fff;
+}
+
+.container-login {
+    font-family: var(--font-principal);
+}
+
+.title-welcome {
+    margin-top: 12px;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    font-weight: var(--font-weight-bold);
+    color: var(--font-color);
+    font-size: 26px;
+}
+
+.subtitle-welcome {
+    color: var(--font-color);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: var(--font-weight-normal);
+    line-height: normal;
+    margin-bottom: 31px;
+}
+
+.label-login {
+    font-size: 15px;
+}
+
+.input-height{
+    height: 60px;
+    font-size: 15px;
+    border-radius: 30px;
+}
+
+.btn-login {
+    padding: 18px 26px;
+    border-radius: 30px;
+    background: var(--font-color-blue);
+    border: none;
+
+    color: var(--font-color-white);
+    font-size: 15px;
+    font-style: normal;
+    font-weight: var(--font-weight-semi-bold);
+    line-height: normal;
+    transition: .3s all ease-in-out ;
+}
+
+.btn-login:hover{
+    background-color: var(--color-hover-btn);
+}
