@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.28-MariaDB
+-- Server version	5.5.5-10.4.32-MariaDB
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -354,7 +354,7 @@ CREATE TABLE `contenedor_omaped` (
   `idtabla` int(10) unsigned NOT NULL DEFAULT 0,
   `value` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `omaped`.`contenedor_omaped`
@@ -408,7 +408,56 @@ INSERT INTO `contenedor_omaped` (`ID`,`Descripcion`,`indicador`,`idtabla`,`value
  (43,'CONTRATADO',2,41,0),
  (44,'INDEPENDIENTE',2,41,0),
  (45,'PENSIONISTA',2,41,0),
- (46,'OTROS',2,41,0);
+ (46,'OTROS',2,41,0),
+ (47,'DEFICIENCIAS EN SALUD',1,47,0),
+ (48,'Comunicacion',2,48,1),
+ (49,'Hablar',2,48,49),
+ (50,'Escuchar',2,48,49),
+ (51,'Ver',2,48,49),
+ (52,'Conducta',2,48,1),
+ (53,'Aprender',2,48,52),
+ (54,'Atender',2,48,52),
+ (55,'Retencion de conocimientos',2,48,52),
+ (56,'Relacionarse',2,48,52),
+ (57,'Tiene conocimiento del yo',2,48,52),
+ (58,'Se ubica en el espacio y el tiempo',2,48,52),
+ (59,'Tiene seguridad personal',2,48,52),
+ (60,'Locomoción',2,48,1),
+ (61,'Caminar',2,48,60),
+ (62,'Correr',2,48,60),
+ (63,'Movilizarse por si mismo',2,48,60),
+ (64,'Disposición corporal',2,48,1),
+ (65,'Arrodillarse',2,48,64),
+ (66,'Realizar tareas del hogar',2,48,64),
+ (67,'Mantener el equilibrio',2,48,64);
+INSERT INTO `contenedor_omaped` (`ID`,`Descripcion`,`indicador`,`idtabla`,`value`) VALUES 
+ (68,'Destreza',2,48,1),
+ (69,'Para agarrar',2,48,68),
+ (70,'Controla pies y manos',2,48,68),
+ (71,'Cuidado personal',2,48,1),
+ (72,'Controla sus esfínteres',2,48,71),
+ (73,'Para bañase',2,48,71),
+ (74,'Para ponerse la ropa',2,48,71),
+ (75,'Para comer',2,48,71),
+ (76,'De situación',2,48,1),
+ (77,'Dependiente de un toxico',2,48,76),
+ (78,'Tolera la temperatura',2,48,76),
+ (79,'Tolera el sonido',2,48,76),
+ (80,'Tolera la iluminacíon',2,48,76),
+ (81,'Tolera el Stress en el trabajo',2,48,76),
+ (82,'Tolera el polvo',2,48,76),
+ (83,'Agentes químicos',2,48,76),
+ (84,'Su discapacidad',2,48,1),
+ (85,'Leve',2,48,84),
+ (86,'Moderado',2,48,84),
+ (87,'Fronterizo',2,48,84),
+ (88,'Severo',2,48,84),
+ (89,'ORIGEN DE SU DISCAPACIDAD',1,89,0),
+ (90,'Enfermedad',2,89,0),
+ (91,'Nacimiento',2,89,0),
+ (92,'Accidente',2,89,0),
+ (93,'Trauma psicológico',2,89,0),
+ (94,'Otro',2,89,0);
 /*!40000 ALTER TABLE `contenedor_omaped` ENABLE KEYS */;
 
 
@@ -4699,7 +4748,8 @@ CREATE TABLE `organizacionessociales` (
 
 /*!40000 ALTER TABLE `organizacionessociales` DISABLE KEYS */;
 INSERT INTO `organizacionessociales` (`ID`,`NOMBRE_ORGANIZACION_SOCIAL`,`IDtipoorganizacionsocial`,`IDdenominacionorganizacionsocial`,`SIOP`,`FechaConstitucion`,`NumeroMiembros`,`Zonal`,`DireccionLocal`,`FinesOrganizacionSocial`,`UbicacionLocal`,`created_at`,`updated_at`) VALUES 
- ('000001','PRUEBA',1,1,'','0000-00-00',0,'01','','','','2025-03-07 11:07:30','2025-03-07 11:07:30');
+ ('000001','PRUEBA',1,1,'','0000-00-00',0,'01','','','','2025-03-07 11:07:30','2025-03-07 11:07:30'),
+ ('000002','A',1,1,'','0000-00-00',0,'01','X','X','','2025-04-20 20:41:06','2025-04-20 20:41:06');
 /*!40000 ALTER TABLE `organizacionessociales` ENABLE KEYS */;
 
 
@@ -4831,36 +4881,29 @@ CREATE TABLE `personas_discapacidad` (
   `ingreso_mensual` decimal(12,2) NOT NULL DEFAULT 0.00,
   `idcondicion_laboral` int(10) unsigned NOT NULL DEFAULT 0,
   `trabajo_antes` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `hablar` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `escuchar` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `ver` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `aprender` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `atender` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `retencion` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `relacionarse` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `conocimiento_yo` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `ubica_espacio` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `seguridad_personal` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `caminar` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `correr` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `movilizarse` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `arrodillarse` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `realiza_tareas` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `equilibrio` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `agarrar` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `controla_pies_manos` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `esfinter` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `baniarse` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `ropa` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `comer` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `dependiente_toxico` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `temperatura` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `sonido` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `iluminacion` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `stress_trabajo` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `polvo` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `quimicos` tinyint(3) unsigned NOT NULL DEFAULT 0,
-  `iddiscapacidad` int(10) unsigned NOT NULL DEFAULT 0,
+  `idorigendiscapacidad` int(10) unsigned NOT NULL DEFAULT 0,
+  `discapacidad_otro` varchar(100) NOT NULL DEFAULT '',
+  `fecha_discapacidad` varchar(100) NOT NULL DEFAULT '',
+  `idrehabilitacion` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `tipo_rehabilitacion` varchar(100) NOT NULL DEFAULT '',
+  `personas_discapacidad` varchar(100) NOT NULL DEFAULT '',
+  `idactividad` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `respuesta_actividad` varchar(100) NOT NULL DEFAULT '',
+  `idorganizacion` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `respuesta_organizacion` varchar(100) NOT NULL DEFAULT '',
+  `trabajo` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `vivienda` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `transporte` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `comunidad` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `ancho` int(10) unsigned NOT NULL DEFAULT 0,
+  `profundidad` int(10) unsigned NOT NULL DEFAULT 0,
+  `altura` int(10) unsigned NOT NULL DEFAULT 0,
+  `observacion_vivienda` varchar(250) NOT NULL DEFAULT '',
+  `observacion_salud` varchar(250) NOT NULL DEFAULT '',
+  `observacion_economica` varchar(250) NOT NULL DEFAULT '',
+  `observacion` varchar(250) NOT NULL DEFAULT '',
+  `recomendaciones` varchar(250) NOT NULL DEFAULT '',
+  `croquis` varchar(250) NOT NULL DEFAULT '',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -4869,10 +4912,39 @@ CREATE TABLE `personas_discapacidad` (
 --
 
 /*!40000 ALTER TABLE `personas_discapacidad` DISABLE KEYS */;
-INSERT INTO `personas_discapacidad` (`ID`,`DNI`,`idvivienda`,`idviven`,`idconstruccion`,`idservicios`,`esPadre`,`contacto`,`telefono`,`numeroHijos`,`idinstruccion`,`idestudios`,`oficio`,`noestudia`,`limita_capacidad`,`gustaria_capacitarse`,`trabaja`,`trabajaEn`,`ingreso_mensual`,`idcondicion_laboral`,`trabajo_antes`,`hablar`,`escuchar`,`ver`,`aprender`,`atender`,`retencion`,`relacionarse`,`conocimiento_yo`,`ubica_espacio`,`seguridad_personal`,`caminar`,`correr`,`movilizarse`,`arrodillarse`,`realiza_tareas`,`equilibrio`,`agarrar`,`controla_pies_manos`,`esfinter`,`baniarse`,`ropa`,`comer`,`dependiente_toxico`,`temperatura`,`sonido`,`iluminacion`,`stress_trabajo`,`polvo`,`quimicos`,`iddiscapacidad`) VALUES 
- (5,'25512665',7,12,17,22,0,'MIGUEL','',5,24,36,'0','1','EN EL CLICK','DOTA',1,'trabajaen','123.00',44,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0),
- (6,'31472032',4,9,14,20,0,'','',0,0,0,'','','','',0,'','0.00',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+INSERT INTO `personas_discapacidad` (`ID`,`DNI`,`idvivienda`,`idviven`,`idconstruccion`,`idservicios`,`esPadre`,`contacto`,`telefono`,`numeroHijos`,`idinstruccion`,`idestudios`,`oficio`,`noestudia`,`limita_capacidad`,`gustaria_capacitarse`,`trabaja`,`trabajaEn`,`ingreso_mensual`,`idcondicion_laboral`,`trabajo_antes`,`idorigendiscapacidad`,`discapacidad_otro`,`fecha_discapacidad`,`idrehabilitacion`,`tipo_rehabilitacion`,`personas_discapacidad`,`idactividad`,`respuesta_actividad`,`idorganizacion`,`respuesta_organizacion`,`trabajo`,`vivienda`,`transporte`,`comunidad`,`ancho`,`profundidad`,`altura`,`observacion_vivienda`,`observacion_salud`,`observacion_economica`,`observacion`,`recomendaciones`,`croquis`) VALUES 
+ (5,'25512665',0,12,17,22,0,'MIGUEL','',5,24,36,'0','1','EN EL CLICK','DOTA',1,'trabajaen','123.00',46,1,91,'otro','hoy',0,'lenguaje','padre, ma',0,'menor de edad2',0,'ateo2',0,0,0,0,30,25,55,'DEMO11\r\nDEMO11','DEMO21\r\nDEMO21','DEMO31\r\nDEMO31','DEMO41\r\nDEMO41','DEMO51\r\nDEMO51','DEMO61\r\nDEMO61'),
+ (6,'31472032',4,9,14,20,0,'','',0,0,0,'','','','',0,'','0.00',0,0,0,'','',0,'','',0,'',0,'',0,0,0,0,0,0,0,'','','','','','');
 /*!40000 ALTER TABLE `personas_discapacidad` ENABLE KEYS */;
+
+
+--
+-- Table structure for table `omaped`.`personas_discapacidad_salud`
+--
+
+DROP TABLE IF EXISTS `personas_discapacidad_salud`;
+CREATE TABLE `personas_discapacidad_salud` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `IdPersona` char(15) NOT NULL DEFAULT '',
+  `idcontenedor` int(10) unsigned NOT NULL DEFAULT 0,
+  `respuesta` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `omaped`.`personas_discapacidad_salud`
+--
+
+/*!40000 ALTER TABLE `personas_discapacidad_salud` DISABLE KEYS */;
+INSERT INTO `personas_discapacidad_salud` (`ID`,`IdPersona`,`idcontenedor`,`respuesta`) VALUES 
+ (1,'25512665',70,1),
+ (2,'25512665',69,0),
+ (3,'25512665',55,1),
+ (4,'25512665',58,1),
+ (5,'25512665',59,0),
+ (6,'25512665',87,1),
+ (7,'25512665',81,1);
+/*!40000 ALTER TABLE `personas_discapacidad_salud` ENABLE KEYS */;
 
 
 --

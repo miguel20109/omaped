@@ -22,12 +22,13 @@ use App\Models\AniosModel;
 use App\Models\MesesModel;
 use App\Models\SexoModel;
 use App\Models\TipoDocumentoModel;
-use App\Models\ContenedorOmapedModel; 
+use App\Models\ContenedorOmapedModel;
+use App\Models\PersonasDiscapacidadSaludModel;
 
 class PersonasDiscapacidadController extends BaseController
 {
 
-    private $fallecidos, $persona, $roles, $reglas, $session, $cementerios, $lugar, $ubicacion, $ubicacionhistorial, $sepultura, $tramite, $correlativo, $ordenes, $solicitud, $autorizaciones, $usuarios, $meses, $anios, $sexo, $tipodocumento, $combos, $personadiscapacitada;
+    private $fallecidos, $persona, $roles, $reglas, $session, $cementerios, $lugar, $ubicacion, $ubicacionhistorial, $sepultura, $tramite, $correlativo, $ordenes, $solicitud, $autorizaciones, $usuarios, $meses, $anios, $sexo, $tipodocumento, $combos, $personadiscapacitada, $salud;
 
     public function __construct()
     {
@@ -43,14 +44,15 @@ class PersonasDiscapacidadController extends BaseController
         $this->correlativo = new CorrelativoModel();
         $this->ordenes = new OrdenModel();
         $this->solicitud = new SolicitudModel();
-		$this->autorizaciones = new AutorizacionesModel();
-		$this->usuarios = new UsuariosModel();
-		$this->anios = new AniosModel();
-		$this->meses = new MesesModel();
-		$this->sexo = new SexoModel();
-		$this->tipodocumento = new TipoDocumentoModel();
-		$this->personadiscapacitada = new PersonasDiscapacidadModel();
-		$this->combos = new ContenedorOmapedModel();
+        $this->autorizaciones = new AutorizacionesModel();
+        $this->usuarios = new UsuariosModel();
+        $this->anios = new AniosModel();
+        $this->meses = new MesesModel();
+        $this->sexo = new SexoModel();
+        $this->tipodocumento = new TipoDocumentoModel();
+        $this->personadiscapacitada = new PersonasDiscapacidadModel();
+        $this->combos = new ContenedorOmapedModel();
+        $this->salud = new PersonasDiscapacidadSaludModel();
 
         helper(['form']);
         $this->session = session();
@@ -81,7 +83,7 @@ class PersonasDiscapacidadController extends BaseController
             return view('permisos');
             exit;
         }
-		$this->persona->select("
+        $this->persona->select("
 			 personas.*
 			,b.id
 			,b.idvivienda
@@ -103,10 +105,33 @@ class PersonasDiscapacidadController extends BaseController
 			,b.ingreso_mensual
 			,b.idcondicion_laboral
 			,b.trabajo_antes
+            ,b.idorigendiscapacidad
+            ,b.discapacidad_otro
+            ,b.fecha_discapacidad
+            ,b.idrehabilitacion
+            ,b.tipo_rehabilitacion
+            ,b.personas_discapacidad
+            ,b.idactividad
+            ,b.respuesta_actividad
+            ,b.idorganizacion
+            ,b.respuesta_organizacion
+            ,b.trabajo
+            ,b.vivienda
+            ,b.transporte
+            ,b.comunidad
+            ,b.ancho
+            ,b.profundidad
+            ,b.altura
+            ,b.observacion_vivienda
+            ,b.observacion_salud
+            ,b.observacion_economica
+            ,b.observacion
+            ,b.recomendaciones
+            ,b.croquis
 		");
-		$data['persona'] = $this->persona->join('personas_discapacidad as b', 'personas.DNI = b.DNI', 'LEFT')->where('personas.DNI', $dni)->first();
+        $data['persona'] = $this->persona->join('personas_discapacidad as b', 'personas.DNI = b.DNI', 'LEFT')->where('personas.DNI', $dni)->first();
 
-/*
+        /*
 		$data['persona'] = $this->persona->where('DNI', $dni)->first();
 		$data['personadiscapacitada'] = $this->personadiscapacitada->where('DNI', $dni)->first();
 		
@@ -114,84 +139,108 @@ class PersonasDiscapacidadController extends BaseController
 
 
         $data['sexo'] = $this->sexo->findAll();
-		$data['tipodocumento'] = $this->tipodocumento->findAll();
-		$data['cbvivienda'] = $this->combos->where(['idtabla'=>'3', 'indicador'=>'2'])->findAll();
-		$data['cbvivenforma'] = $this->combos->where(['idtabla'=>'8', 'indicador'=>'2'])->findAll();
-		$data['cbconstruccion'] = $this->combos->where(['idtabla'=>'13', 'indicador'=>'2'])->findAll();
-		$data['cbservicios'] = $this->combos->where(['idtabla'=>'18', 'indicador'=>'2'])->findAll();
-		$data['cbinstruccion'] = $this->combos->where(['idtabla'=>'23', 'indicador'=>'2'])->findAll();
-		$data['cbestudios'] = $this->combos->where(['idtabla'=>'33', 'indicador'=>'2'])->findAll();
-		$data['cbsino'] = $this->combos->where(['idtabla'=>'38', 'indicador'=>'2'])->findAll();
-		$data['cbcondicion_laboral'] = $this->combos->where(['idtabla'=>'41', 'indicador'=>'2'])->findAll();
-		
+        $data['tipodocumento'] = $this->tipodocumento->findAll();
+        $data['cbvivienda'] = $this->combos->where(['idtabla' => '3', 'indicador' => '2'])->findAll();
+        $data['cbvivenforma'] = $this->combos->where(['idtabla' => '8', 'indicador' => '2'])->findAll();
+        $data['cbconstruccion'] = $this->combos->where(['idtabla' => '13', 'indicador' => '2'])->findAll();
+        $data['cbservicios'] = $this->combos->where(['idtabla' => '18', 'indicador' => '2'])->findAll();
+        $data['cbinstruccion'] = $this->combos->where(['idtabla' => '23', 'indicador' => '2'])->findAll();
+        $data['cbestudios'] = $this->combos->where(['idtabla' => '33', 'indicador' => '2'])->findAll();
+        $data['cbsino'] = $this->combos->where(['idtabla' => '38', 'indicador' => '2'])->findAll();
+        $data['cbcondicion_laboral'] = $this->combos->where(['idtabla' => '41', 'indicador' => '2'])->findAll();
+        $data['cbsalud'] = $this->combos->where(['idtabla' => '48', 'indicador' => '2'])->findAll();
+        $data['cborigendiscapacidad'] = $this->combos->where(['idtabla' => '89', 'indicador' => '2'])->findAll();
+
         $data['active'] = 'personas';
         return view('personasdiscapacidad/nuevo', $data);
     }
-	
+
     public function create()
     {
 
         if ($this->request->is('post') && verificar('nuevo personas', $this->session->permisos)) {
 
-			$dni = $this->request->getVar('dni');
-			$id_discapacidad = $this->request->getVar('id_discapacidad');
-			$buscar = empty($id_discapacidad)? '1' : '2';
-			
-			
+            $dni = $this->request->getVar('dni');
+            $id_discapacidad = $this->request->getVar('id_discapacidad');
+            $buscar = empty($id_discapacidad) ? '1' : '2';
+
+
             if ($this->request->is('post')) {
                 $data = [
                     'DNI' => $dni,
                     'idvivienda' => $this->request->getVar('cbvivienda'),
                     'idviven' => $this->request->getVar('cbvivenforma'),
-					'idconstruccion' => $this->request->getVar('cbconstruccion'),
-					'idservicios' => $this->request->getVar('cbservicios'),
-					'espadre' => $this->request->getVar('cbespadre'),
-					'contacto' => $this->request->getVar('contacto'),
-					'telefono' => $this->request->getVar('telefono'),
-					'numerohijos' => $this->request->getVar('numero_hijos'),
-					'idinstruccion' => $this->request->getVar('cbinstruccion'),
-					'idestudios' => $this->request->getVar('cbestudios'),
-					'oficio' => $this->request->getVar('oficio'),
-					'noestudia' => $this->request->getVar('noestudia'),
-					'limita_capacidad' => $this->request->getVar('limita_capacidad'),
-					'gustaria_capacitarse' => $this->request->getVar('gustaria_capacitarse'),
-					'trabaja' => $this->request->getVar('cbtrabaja'),
-					'trabajaen' => $this->request->getVar('trabajaen'),
-					'ingreso_mensual' => $this->request->getVar('ingreso_mensual'),
-					'idcondicion_laboral' => $this->request->getVar('idcondicion_laboral'),
-					'trabajo_antes' => $this->request->getVar('cbtrabajo_anteriormente'),
-					'idcondicion_laboral' => $this->request->getVar('cbcondicion_laboral'),
+                    'idconstruccion' => $this->request->getVar('cbconstruccion'),
+                    'idservicios' => $this->request->getVar('cbservicios'),
+                    'espadre' => $this->request->getVar('cbespadre'),
+                    'contacto' => $this->request->getVar('contacto'),
+                    'telefono' => $this->request->getVar('telefono'),
+                    'numerohijos' => $this->request->getVar('numero_hijos'),
+                    'idinstruccion' => $this->request->getVar('cbinstruccion'),
+                    'idestudios' => $this->request->getVar('cbestudios'),
+                    'oficio' => $this->request->getVar('oficio'),
+                    'noestudia' => $this->request->getVar('noestudia'),
+                    'limita_capacidad' => $this->request->getVar('limita_capacidad'),
+                    'gustaria_capacitarse' => $this->request->getVar('gustaria_capacitarse'),
+                    'trabaja' => $this->request->getVar('cbtrabaja'),
+                    'trabajaen' => $this->request->getVar('trabajaen'),
+                    'ingreso_mensual' => $this->request->getVar('ingreso_mensual'),
+                    'idcondicion_laboral' => $this->request->getVar('cbcondicion_laboral'),
+                    'trabajo_antes' => $this->request->getVar('cbtrabajo_anteriormente'),
+                    'idorigendiscapacidad' => $this->request->getVar('cborigendiscapacidad'),
+                    'discapacidad_otro' => $this->request->getVar('discapacidad_otro'),
+                    'fecha_discapacidad' => $this->request->getVar('fecha_discapacidad'),   
+                    'idrehabilitacion' => $this->request->getVar('cbrehabilitacion'), 
+                    'tipo_rehabilitacion' => $this->request->getVar('tipo_rehabilitacion'), 
+                    'personas_discapacidad' => $this->request->getVar('personas_discapacidad'),
+                    'idactividad' => $this->request->getVar('cbactividad'), 
+                    'respuesta_actividad' => $this->request->getVar('respuesta_actividad'),
+                    'idorganizacion' => $this->request->getVar('cborganizacion'), 
+                    'respuesta_organizacion' => $this->request->getVar('respuesta_organizacion'),
+                    'trabajo' => $this->request->getVar('cbtrabajo'),
+                    'vivienda' => $this->request->getVar('cbvivienda'),
+                    'transporte' => $this->request->getVar('cbtransporte'),
+                    'comunidad' => $this->request->getVar('cbcomunidad'),
+                    'ancho' => $this->request->getVar('ancho'),
+                    'profundidad' => $this->request->getVar('profundidad'),
+                    'altura' => $this->request->getVar('altura'),
+                    'observacion_vivienda' => $this->request->getVar('observacion_vivienda'),
+                    'observacion_salud' => $this->request->getVar('observacion_salud'),
+                    'observacion_economica' => $this->request->getVar('observacion_economica'),
+                    'observacion' => $this->request->getVar('observacion'),
+                    'recomendaciones' => $this->request->getVar('recomendaciones'),
+                    'croquis' => $this->request->getVar('croquis')
                 ];
-				
-				if ($buscar == '1'){
-					if ($this->personadiscapacitada->insert($data) === false) {
-						$data['errors'] = $this->persona->errors();
-						$data['active'] = 'personas';
-						return view('personas/nuevo', $data);
-					}
-				}
-				
-				if ($buscar == '2'){
-					if ($this->personadiscapacitada->where('DNI', $dni)->set($data)->update() === false) {
-						$data['errors'] = $this->persona->errors();
-						$data['persona'] = $this->persona->where('DNI', $dni)->first();
-						$data['active'] = 'personas';
-						return view('personasfallecidas/edit', $data);
-					}
-				}
-				
+
+                if ($buscar == '1') {
+                    if ($this->personadiscapacitada->insert($data) === false) {
+                        $data['errors'] = $this->persona->errors();
+                        $data['active'] = 'personas';
+                        return view('personas/nuevo', $data);
+                    }
+                }
+
+                if ($buscar == '2') {
+                    if ($this->personadiscapacitada->where('DNI', $dni)->set($data)->update() === false) {
+                        $data['errors'] = $this->persona->errors();
+                        $data['persona'] = $this->persona->where('DNI', $dni)->first();
+                        $data['active'] = 'personas';
+                        return view('personasfallecidas/edit', $data);
+                    }
+                }
+
                 return redirect()->to(base_url('personas'))->with('respuesta', [
                     'type' => 'success',
                     'msg' => 'PERSONA REGISTRADA',
                 ]);
             } else {
-				$data['persona'] = $this->persona->where('DNI', $dni)->first();
-				$data['sexo'] = $this->sexo->findAll();
-				$data['tipodocumento'] = $this->tipodocumento->findAll();
-				$data['cbvivienda'] = $this->combos->where(['idtabla'=>'3', 'indicador'=>'2'])->findAll();
-				$data['cbvivenforma'] = $this->combos->where(['idtabla'=>'8', 'indicador'=>'2'])->findAll();
-				$data['cbconstruccion'] = $this->combos->where(['idtabla'=>'13', 'indicador'=>'2'])->findAll();
-				$data['cbservicios'] = $this->combos->where(['idtabla'=>'18', 'indicador'=>'2'])->findAll();
+                $data['persona'] = $this->persona->where('DNI', $dni)->first();
+                $data['sexo'] = $this->sexo->findAll();
+                $data['tipodocumento'] = $this->tipodocumento->findAll();
+                $data['cbvivienda'] = $this->combos->where(['idtabla' => '3', 'indicador' => '2'])->findAll();
+                $data['cbvivenforma'] = $this->combos->where(['idtabla' => '8', 'indicador' => '2'])->findAll();
+                $data['cbconstruccion'] = $this->combos->where(['idtabla' => '13', 'indicador' => '2'])->findAll();
+                $data['cbservicios'] = $this->combos->where(['idtabla' => '18', 'indicador' => '2'])->findAll();
                 $data['active'] = 'personas';
                 return view('personas/nuevo', $data);
             }
@@ -199,7 +248,7 @@ class PersonasDiscapacidadController extends BaseController
             return view('permisos');
         }
     }
-	
+
     public function declarar($dni, $declarante, $fecha)
     {
         //if ($this->request->is('post') && verificar('nuevo cliente', $this->session->permisos)){
@@ -256,7 +305,7 @@ class PersonasDiscapacidadController extends BaseController
         $data['lugar'] = $this->lugar->findAll();
         $data['sepultura'] = $this->sepultura->findAll();
         $data['tramite'] = $this->tramite->findAll();
-		$data['usuarios'] = $this->usuarios->where('estado', '1')->orderBy('nombre', 'ASC')->findAll();
+        $data['usuarios'] = $this->usuarios->where('estado', '1')->orderBy('nombre', 'ASC')->findAll();
 
         $data['persona'] = $this->persona->where('DNI', $idPersona)->first();
 
@@ -291,7 +340,7 @@ class PersonasDiscapacidadController extends BaseController
                 'derecha' => $this->request->getVar('derecha'),
                 'alto' => $this->request->getVar('alto'),
                 'IDsepultura' => $this->request->getVar('cbsepultura'),
-				'IDencargado' => $this->request->getVar('cbusuarios')
+                'IDencargado' => $this->request->getVar('cbusuarios')
             ];
 
             //if ($this->fallecidos->update($idPersona, $data) === false) {
@@ -389,67 +438,44 @@ class PersonasDiscapacidadController extends BaseController
         }
     }
 
-    public function listacroquis($idPersona)
+    public function listardiscapacidad($idPersona)
     {
 
-        $this->ubicacionhistorial->select("personas_ubicacion_historial.ID, numero, concat(a.apaterno,' ',a.amaterno,' ',a.nombres) as solicitante, b.Descripcion as tramite");
-        $this->ubicacionhistorial->join('personas as a', 'personas_ubicacion_historial.IDsolicitante = a.dni');
-        $data = $this->ubicacionhistorial->join('tramite as b', 'personas_ubicacion_historial.IDtramite = b.ID')->where('personas_ubicacion_historial.dni', $idPersona)->findAll();
+        $this->salud->select("
+         personas_discapacidad_salud.ID
+        ,personas_discapacidad_salud.IdPersona
+        ,personas_discapacidad_salud.idcontenedor
+        ,personas_discapacidad_salud.respuesta
+        ,a.descripcion as discapacidad"
+        );
+        $data = $this->salud->join('contenedor_omaped as a', 'personas_discapacidad_salud.idcontenedor = a.ID')->where('personas_discapacidad_salud.IdPersona', $idPersona)->findAll();
 
+
+        //$data = $this->salud->where('IdPersona', $idPersona)->findAll();
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
         die();
     }
 
-    public function generaorden($dni_difunto, $dni_declarante, $cementerio, $lugar, $procedencia)
+    public function agregardiscapacidad($dni, $cdsalud, $cbrespuesta)
     {
 
-        //if ($this->request->isAJAX()) {
-        //if ($this->request->is('post')) {
-
-        $nro['correlativo'] = $this->correlativo->where('id', '4')->first();
-        $secuencia = $nro['correlativo']['Numero'] + 1;
-        $anio = $nro['correlativo']['Anio'];
-
-        $this->correlativo->update('4', ['Numero' => $secuencia]);
-
-        $nro['correlativo'] = $this->correlativo->where('id', '4')->first();
-        $secuencia = $nro['correlativo']['Numero'];
-        $anio = $nro['correlativo']['Anio'];
-
-        $numero = str_pad($secuencia, 5, "0", STR_PAD_LEFT) . '-' . $anio;
-
-        $data = $this->ordenes->insert([
-            'numero' => $numero,
-            'IDdifunto' => $dni_difunto,
-            'IDdeclarante' => $dni_declarante,
-            'IDcementerio' => $cementerio,
-            'IDlugar' => $lugar,
-            'procedencia' => $procedencia,
-			'firma' => 'firma_ycastanedaa.png',
+        $data = $this->salud->insert([
+            'IdPersona' => $dni,
+            'idcontenedor' => $cdsalud,
+            'respuesta' => $cbrespuesta,
         ]);
 
         if ($data > 0) {
-            return redirect()->to(base_url('personasfallecidas/' . $dni_difunto . '/edit'))->with('respuesta', [
+            return redirect()->to(base_url('personasdiscapacidad/' . $dni . '/new'))->with('respuesta', [
                 'type' => 'success',
                 'msg' => 'ORDEN REGISTRADA',
             ]);
         } else {
-            return redirect()->to(base_url('personasfallecidas/' . $dni_difunto . '/edit'))->with('respuesta', [
+            return redirect()->to(base_url('personasdiscapacidad/' . $dni . '/new'))->with('respuesta', [
                 'type' => 'danger',
                 'msg' => 'ERROR AL REGISTRAR',
             ]);
         }
-
-        //}
-        /*
-		else {
-            //$data['validacion'] = $this->validator;
-            //$data['anios'] = $this->anios->where('ID <=', $year)->findAll();
-            //$data['rol'] = $this->request->getVar('rol');
-            //$data['active'] = 'organizaciones';
-            return view('personasfallecidas/' . $dni_difunto . '/edit', $data);
-        }
-*/
     }
 
     public function listaorden($idPersona)
@@ -535,14 +561,14 @@ class PersonasDiscapacidadController extends BaseController
             exit;
         }
 
-		$data['anios'] = $this->anios->findAll();
-		$data['meses'] = $this->meses->findAll();
+        $data['anios'] = $this->anios->findAll();
+        $data['meses'] = $this->meses->findAll();
         $data['tramite'] = $this->tramite->findAll();
         $data['active'] = 'solicitudes';
 
-		$data['anio'] = date('Y');
-		$data['mes'] = date('m');
-		
+        $data['anio'] = date('Y');
+        $data['mes'] = date('m');
+
         return view('personasfallecidas/solicitudes', $data);
     }
 
@@ -552,7 +578,7 @@ class PersonasDiscapacidadController extends BaseController
         //$where = array('b.ID' => '1');
         //$where = array('numero' => $cbtramite);
 
-		$where = "b.ID=$cbtramite and DATE_FORMAT(solicitudes.created_at, '%m')=$mes and DATE_FORMAT(solicitudes.created_at, '%Y')=$anio and solicitudes.estado in('1','2')";
+        $where = "b.ID=$cbtramite and DATE_FORMAT(solicitudes.created_at, '%m')=$mes and DATE_FORMAT(solicitudes.created_at, '%Y')=$anio and solicitudes.estado in('1','2')";
 
         $this->solicitud->select("solicitudes.ID, numero, concat(a.apaterno,' ',a.amaterno,' ',a.nombres) as solicitante, a.telefono, b.Descripcion as tramite, b.reporte, solicitudes.IDtramite, solicitudes.estado");
         $this->solicitud->join('personas as a', 'solicitudes.IDsolicitante = a.dni');
@@ -564,21 +590,21 @@ class PersonasDiscapacidadController extends BaseController
 
     public function editsolicitud($id)
     {
-		/*
+        /*
         if (!verificar('editar cliente', $this->session->permisos)) {
             return view('permisos');
             exit;
         }
 		*/
-		
+
         $data['solicitud'] = $this->solicitud->where('ID', $id)->first();
-		$data['tramite'] = $this->tramite->where('ID', $data['solicitud']['IDtramite'])->first();
-		$data['persona'] = $this->persona->where('DNI', $data['solicitud']['IDsolicitante'])->first();
+        $data['tramite'] = $this->tramite->where('ID', $data['solicitud']['IDtramite'])->first();
+        $data['persona'] = $this->persona->where('DNI', $data['solicitud']['IDsolicitante'])->first();
         $data['active'] = 'solicitudes';
 
         return view('personasfallecidas/editsolicitud', $data);
     }
-	
+
     public function updatesolicitud($id)
     {
         //if ($this->request->is('put') && verificar('editar cliente', $this->session->permisos)){
@@ -589,12 +615,12 @@ class PersonasDiscapacidadController extends BaseController
                 'fecha_expediente' => $this->request->getVar('fecha_exp'),
                 'recibo' => $this->request->getVar('recibo'),
                 'fecha_pago' => $this->request->getVar('fecha_pago'),
-				'recibos' => $this->request->getVar('recibos')
+                'recibos' => $this->request->getVar('recibos')
             ];
 
             if ($this->solicitud->where('id', $id)->set($data_solicitud)->update() === false) {
                 //$data['errors'] = $this->fallecidos->errors();
-               // $data['ubicacion'] = $this->ubicacion->where('DNI', $idPersona)->first();
+                // $data['ubicacion'] = $this->ubicacion->where('DNI', $idPersona)->first();
                 $data['active'] = 'solicitudes';
                 return view('personasfallecidas/' . $id . '/editsolicitud', $data);
             }
@@ -607,128 +633,7 @@ class PersonasDiscapacidadController extends BaseController
             return view('permisos');
         }
     }
-	
-    public function delete($id)
-    {
-		//&& verificar('eliminar usuario', $this->session->permisos)
-		
-        if ($this->request->is('delete')) {
 
-		//$this->db->transBegin();
-		
-			$data['solicitud'] = $this->solicitud->where('ID', $id)->first();
-			
-			$dni_difunto = $data['solicitud']['IDdifunto'];
-			$dni_solicitante = $data['solicitud']['IDsolicitante'];
-			$idcementerio = $data['solicitud']['IDcementerio'];
-			$idsepultura = $data['solicitud']['IDsepultura'];
-			$cbtramite = $data['solicitud']['IDtramite'];
-			$recibo = $data['solicitud']['recibo'];
-			$expediente = $data['solicitud']['expediente'];
-			$fecha_expediente = $data['solicitud']['fecha_expediente'];
-			$fecha_pago = $data['solicitud']['fecha_pago'];
-			$recibos = $data['solicitud']['recibos'];
-
-            $data['ubicacion'] = $this->ubicacion->where('dni', $dni_difunto)->first();
-			
-			$subiendo = $data['ubicacion']['subiendo'];
-			$izquierda = $data['ubicacion']['izquierda'];
-			$derecha = $data['ubicacion']['derecha'];
-			$columna = $data['ubicacion']['columna'];
-			$nivel = $data['ubicacion']['nivel'];
-			$largo = $data['ubicacion']['largo'];
-			$ancho = $data['ubicacion']['ancho'];
-			$alto = $data['ubicacion']['alto'];
-			$encargado = $data['ubicacion']['IDencargado'];
-			
-			$nro['tramite'] = $this->tramite->where('ID', $cbtramite)->first();
-			$secuencia = $nro['tramite']['contador_autorizacion'] + 1;
-			
-			$this->tramite->where('ID', $cbtramite)->set(['contador_autorizacion' => $secuencia])->update();
-			
-			$nro['tramite'] = $this->tramite->where('ID', $cbtramite)->first();
-			$secuencia = $nro['tramite']['contador_autorizacion'];
-			$anio = $nro['tramite']['anio'];
-			$reporte = $nro['tramite']['reporte_autorizacion'];
-			
-			$numero = str_pad($secuencia, 5, "0", STR_PAD_LEFT).'-'.$anio;
-			
-			$data = $this->autorizaciones->insert([
-				'numero' => $numero,
-				'IDdifunto' => $dni_difunto,
-				'IDsolicitante' => $dni_solicitante,
-				'IDcementerio' => $idcementerio,
-				'IDsepultura' => $idsepultura,
-				'IDtramite' => $cbtramite,
-				'subiendo' => $subiendo,
-				'izquierda' => $izquierda,
-				'derecha' => $derecha,
-				'columna' => $columna,
-				'nivel' => $nivel,
-				'largo' => $largo,
-				'ancho' => $ancho,
-				'alto' => $alto,
-				'IDencargado' => $encargado,
-				'IDusuario' => $this->session->id_usuario,
-				'recibo' => $recibo,
-				'expediente' => $expediente,
-				'fecha_expediente' => $fecha_expediente,
-				'fecha_pago' => $fecha_pago,
-				'recibos' => $recibos,
-				'reporte' => $reporte
-			]);
-			
-			$this->solicitud->where('ID', $id)->set(['estado' => '2'])->update();
-
-			/*
-			if ($this->db->transStatus() === FALSE)	{
-				$this->db->transRollback();
-				return false;
-			} else {
-				$this->db->transCommit();
-				//return true;
-                return redirect()->to(base_url('personasfallecidas/solicitudes'))->with('respuesta', [
-                    'type' => 'danger',
-                    'msg' => 'ERROR AL GENERAR LA AUTORIZACIÓN',
-                ]);
-			}
-			*/
-			//('personasfallecidas/' . $dni_difunto . '/edit')
-            if ($data) {
-                return redirect()->to(base_url('personasfallecidas/solicitudes'))->with('respuesta', [
-                    'type' => 'success',
-                    'msg' => 'SE GENERO LA AUTORIZACIÓN',
-                ]);
-            } else {
-                return redirect()->to(base_url('personasfallecidas/solicitudes'))->with('respuesta', [
-                    'type' => 'danger',
-                    'msg' => 'ERROR AL GENERAR LA AUTORIZACIÓN',
-                ]);
-            }
-
-        } else {
-            return view('permisos');
-        }
-    }
-	
-    public function autorizaciones()
-    {
-        if (!verificar('listar autorizacion', $this->session->permisos)) {
-            return view('permisos');
-            exit;
-        }
-
-		$data['anios'] = $this->anios->findAll();
-		$data['meses'] = $this->meses->findAll();
-        $data['tramite'] = $this->tramite->findAll();
-        $data['active'] = 'autorizaciones';
-
-		$data['anio'] = date('Y');
-		$data['mes'] = date('m');
-
-        return view('personasfallecidas/autorizaciones', $data);
-    }
-	
     public function listaautorizaciones($cbtramite, $mes, $anio)
     {
         //$where = null;
@@ -736,8 +641,8 @@ class PersonasDiscapacidadController extends BaseController
         //$where = array('numero' => $cbtramite);
 
         //$where = array('b.ID' => $cbtramite, 'autorizaciones.estado' => '1');
-		
-		$where = "b.ID=$cbtramite and DATE_FORMAT(autorizaciones.created_at, '%m')=$mes and DATE_FORMAT(autorizaciones.created_at, '%Y')=$anio and autorizaciones.estado in('1')";
+
+        $where = "b.ID=$cbtramite and DATE_FORMAT(autorizaciones.created_at, '%m')=$mes and DATE_FORMAT(autorizaciones.created_at, '%Y')=$anio and autorizaciones.estado in('1')";
 
         $this->autorizaciones->select("autorizaciones.ID, numero, concat(a.apaterno,' ',a.amaterno,' ',a.nombres) as solicitante, a.telefono, b.Descripcion as tramite, autorizaciones.reporte, autorizaciones.IDtramite");
         $this->autorizaciones->join('personas as a', 'autorizaciones.IDsolicitante = a.dni');

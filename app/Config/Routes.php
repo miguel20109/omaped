@@ -131,7 +131,8 @@ $routes->group('', ['filter' => 'AuthCheck'], function ($routes) {
     //Personas con dicapacidad
 	$routes->get('/personasdiscapacidad/(:alphanum)/new', 'PersonasDiscapacidadController::new/$1');
 	$routes->post('/personasdiscapacidad', 'PersonasDiscapacidadController::create');
-	
+	$routes->get('/personasdiscapacidad/(:alphanum)/listardiscapacidad', 'PersonasDiscapacidadController::listardiscapacidad/$1');
+    $routes->get('/personasdiscapacidad/agregardiscapacidad/(:alphanum)/(:num)/(:num)', 'PersonasDiscapacidadController::agregardiscapacidad/$1/$2/$3');
 	//Personas fallecidas
 	
 	$routes->get('/personasfallecidas', 'PersonasfallecidasController::index');
