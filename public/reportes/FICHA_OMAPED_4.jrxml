@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHA_OMAPED_4" language="groovy" pageWidth="469" pageHeight="842" columnWidth="469" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dni" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+ a.dni
+,CASE WHEN a.trabaja = '1' THEN 'SI' ELSE 'NO' END as trabaja
+,a.trabajaen
+,a.ingreso_mensual
+,CASE WHEN a.trabajo_antes = '1' THEN 'SI' ELSE 'NO' END as trabajo_antes
+
+,a1.Descripcion as descri_origendiscapacidad
+,a.discapacidad_otro
+,a.fecha_discapacidad
+,CASE WHEN a.idrehabilitacion = '1' THEN 'SI' ELSE 'NO' END as rehabilitacion
+,a.tipo_rehabilitacion
+,a.personas_discapacidad
+from personas_discapacidad a
+left JOIN contenedor_omaped a1 on a.idorigendiscapacidad=a1.id
+where a.dni=$P{dni}]]>
+	</queryString>
+	<field name="dni" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="trabaja" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="trabajaen" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ingreso_mensual" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="trabajo_antes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descri_origendiscapacidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="discapacidad_otro" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_discapacidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rehabilitacion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo_rehabilitacion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="personas_discapacidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band height="129" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="469" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["VII. ORIGEN DE SU DISCAPACIDAD"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="19" width="469" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="157" y="21" width="184" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{descri_origendiscapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="21" width="145" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Origen de su discapacidad:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="39" width="259" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{discapacidad_otro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="39" width="70" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Otro: detallar"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="341" y="21" width="128" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Fecha adq. discapacidad:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="57" width="30" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{rehabilitacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="57" width="99" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Recibe rehabilitación:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="57" width="98" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Tipo de rehabilitación:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="57" width="230" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_rehabilitacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="75" width="457" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Personas con discapacidad hay en su casa incluyendose a usted:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="111" width="457" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Si existiera más de una persona con discapacidad aplicar estas preguntas solo a un entrevistado"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="341" y="39" width="128" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha_discapacidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="93" width="457" height="18"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{personas_discapacidad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>

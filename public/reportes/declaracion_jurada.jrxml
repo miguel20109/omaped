@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="declaracion_jurada" language="groovy" pageWidth="595" pageHeight="842" columnWidth="517" leftMargin="42" rightMargin="36" topMargin="34" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="REPORT_URL_IMG" class="java.lang.String"/>
+	<parameter name="id" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+ dni
+,CONVERT(concat(apaterno,' ',amaterno,' ',nombres) USING utf8) as nombres
+,CONVERT(direccion USING utf8) as direccion
+,telefono
+,ubigeo
+,DATE_FORMAT(now(), "%d") as fecha_dia
+,mes(now(), 'es_PE') as fecha_mes
+,DATE_FORMAT(now(), "%Y") as fecha_anio
+,(SELECT CONVERT(nombre USING utf8) FROM anios a where a.id=DATE_FORMAT(now(), "%Y") ) as nombre_anio
+FROM personas
+where dni=$P{id}
+;]]>
+	</queryString>
+	<field name="dni" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombres" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ubigeo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_dia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_mes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_anio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_anio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="dni_difunto">
+		<groupExpression><![CDATA[$F{dni}]]></groupExpression>
+		<groupHeader>
+			<band height="629">
+				<textField>
+					<reportElement x="0" y="66" width="517" height="21"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="15" isBold="true" isItalic="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["DECLARACION JURADA LEY 27444."]]></textFieldExpression>
+				</textField>
+				<image scaleImage="FillFrame" onErrorType="Icon">
+					<reportElement x="0" y="0" width="517" height="45"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/encabezado.png"]]></imageExpression>
+				</image>
+				<textField>
+					<reportElement x="207" y="520" width="292" height="14"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Comas, "+$F{fecha_dia}+" de "+$F{fecha_mes}+" del "+$F{fecha_anio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="256" y="607" width="173" height="12"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["FIRMA DEL DECLARANTE"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="256" y="605" width="173" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="0" y="115" width="517" height="72"/>
+					<textElement verticalAlignment="Top" lineSpacing="1_1_2" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Yo "+$F{nombres}+" Identificado(a) con DNI N°"+ $F{dni} +" Con domicilio en "+$F{direccion}+" Distrito de "+$F{ubigeo}+"<br>Teléfono "+$F{telefono}]]></textFieldExpression>
+				</textField>
+				<rectangle radius="0">
+					<reportElement x="435" y="548" width="62" height="72"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</rectangle>
+				<textField>
+					<reportElement x="0" y="47" width="517" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="9" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_anio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="208" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["Teniendo que realizar el trámite de..............................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="229" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="267" width="517" height="19"/>
+					<textElement textAlignment="Justified" verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["DECLARO:"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="438" width="517" height="63"/>
+					<textElement verticalAlignment="Top" lineSpacing="1_1_2" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["En caso de comprobar fraude o falsedad en la declaración, asumiré las sanciones dispuestas por la ley N° 27444 y demás normas concordante. En señal de conformidad firmo el presente documento e imprimo mi huella digital."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="291" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="313" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="335" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="357" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="379" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="401" width="517" height="19"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="13" isBold="false" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["......................................................................................................................................................................."]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<pageFooter>
+		<band height="52">
+			<line>
+				<reportElement x="0" y="4" width="517" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="0" y="29" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Teléfono: (01) 542-7607 / (01) 542-7661"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="7" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Centro Cívico Municipal: Av. 22 de agosto s/n Cdra. 8 Urb. Santa Luzmila, Alt. Av. Universitaria-Cdra. 63"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="18" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Palacio Municipal: Av. España s/n, Plaza de Armas, P.J. La Libertad, Av. Túpac Amaru-Km 11"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="517" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["www.municomas.gob.pe"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

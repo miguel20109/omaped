@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CREDENCIAL" language="groovy" columnCount="4" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="207" leftMargin="8" rightMargin="5" topMargin="17" bottomMargin="17">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="316"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="numero" class="java.lang.String"/>
+	<parameter name="idresolucion" class="java.lang.String"/>
+	<parameter name="REPORT_URL_IMG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["http://172.16.18.239/ruos/public/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+ a.id
+,CONVERT(a.nombre_organizacion_social USING utf8) as nombre_organizacion_social
+,b.dni
+,CONVERT(nombres USING utf8) as nombres
+,CONVERT(concat(c.apaterno,' ',c.amaterno) USING utf8) as apellidos
+,CONVERT(d.descripcion USING utf8) as cargo
+,concat(numero,'-',anio,'-',siglas) as resolucion
+,DATE_FORMAT(e.inicioVigencia, "%d/%m/%Y") as inicioVigencia
+,DATE_FORMAT(e.finVigencia, "%d/%m/%Y") as finVigencia
+,c.foto
+,e.vigente
+FROM db_ruos.organizacionessociales a
+INNER JOIN db_ruos.juntadirectiva b on a.id=b.idorganizacion
+INNER JOIN db_ruos.personas c on b.dni=c.dni
+INNER JOIN db_ruos.cargos d on b.idcargo=d.id
+INNER JOIN db_ruos.resolucion e on b.idresolucion=e.id
+WHERE b.idresolucion=$P{idresolucion} and b.estado=1
+ORDER BY e.anio asc, e.numero asc;]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_organizacion_social" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dni" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombres" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellidos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cargo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="resolucion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="inicioVigencia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="finVigencia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="foto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vigente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="ID" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+	</group>
+	<detail>
+		<band height="501" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="0" width="197" height="246"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/CREADENCIAL_01.png"
+]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="255" width="197" height="246"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/CREADENCIAL_02.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="9" y="413" width="178" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{inicioVigencia}.toString()+" HASTA "+$F{finVigencia}.toString()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="144" width="175" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="197" width="175" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="170" width="175" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{apellidos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="9" y="388" width="178" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{resolucion}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" onErrorType="Icon">
+				<reportElement x="130" y="60" width="57" height="60"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"img_dni/"+$F{dni}+".png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="9" y="348" width="178" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_organizacion_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="13" y="220" width="175" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="121" width="57" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="13" width="197" height="220">
+					<printWhenExpression><![CDATA[$F{vigente}.equals(0)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/CREDENCIAL_VENCIDA.png"]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="266" width="197" height="220">
+					<printWhenExpression><![CDATA[$F{vigente}.equals(0)]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"reportes/img/CREDENCIAL_VENCIDA.png"]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>
