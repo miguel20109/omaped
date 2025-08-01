@@ -18,14 +18,12 @@ class PersonasDiscapacidadModel extends Model
         'idorigendiscapacidad', 'discapacidad_otro', 'fecha_discapacidad', 'idrehabilitacion', 'tipo_rehabilitacion', 'personas_discapacidad', 'idactividad',
         'respuesta_actividad', 'idorganizacion', 'respuesta_organizacion', 'trabajo', 'vivienda', 'transporte', 'comunidad', 'ancho', 'profundidad', 'altura',
         'observacion_vivienda', 'observacion_salud', 'observacion_economica', 'observacion', 'recomendaciones', 'croquis', 'sugerencias',
-		'certificado', 'institucion_otorgo', 'carnet_conadis', 'seguro', 'apoderado', 'carnet_vigencia', 'cuantos_viven', 'limita_trabajo'
+		'certificado', 'institucion_otorgo', 'carnet_conadis', 'seguro', 'apoderado', 'carnet_vigencia', 'cuantos_viven', 'limita_trabajo', 'created_user', 'updated_user'
     ];
 
     // Dates
-    /*
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-    */
 }

@@ -70,7 +70,7 @@ Editar Persona
                         </div>
                         <div class="form-group col-md-3">
                             <label>Edad</label>
-                            <input type="date" id="fechafallecimiento" name="fechafallecimiento" class="form-control" value="<?php echo set_value('fecha_fallecimiento', $persona['fecha_fallecimiento']); ?>" readonly>
+                            <input type="text" id="edad" name="edad" class="form-control" value="<?php echo set_value('edad', $persona['edad']); ?>" readonly>
                         </div>
                 <div class="form-group col-md-4">
                     <label>Departamento(nacimiento)</label>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHA_OMAPED" language="groovy" pageWidth="595" pageHeight="842" columnWidth="469" leftMargin="56" rightMargin="70" topMargin="28" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="72"/>
+	<property name="ireport.y" value="993"/>
 	<parameter name="REPORT_URL_IMG" class="java.lang.String"/>
 	<parameter name="dni" class="java.lang.String"/>
 	<queryString>
@@ -41,6 +41,8 @@
 ,b2.provincia
 ,b3.distrito
 ,a.referencia
+,CONVERT(concat(b4.nombre,' ',b4.apellido) USING utf8) as created_user
+,DATE_FORMAT(b.created_at, "%d/%m/%Y") as created_at
 FROM personas a
 INNER JOIN personas_discapacidad b on a.dni=b.dni
 INNER JOIN sexo c on a.idsexo=c.id
@@ -55,6 +57,7 @@ left JOIN contenedor_omaped a7 on b.seguro=a7.id
 left JOIN ubigeo_region b1 on a.region=b1.id
 left JOIN ubigeo_provincia b2 on a.provincia=b2.id
 left JOIN ubigeo_distrito b3 on a.distrito=b3.id
+left JOIN usuarios b4 on b.created_user=b4.id
 where a.dni=$P{dni}
 ;]]>
 	</queryString>
@@ -160,6 +163,12 @@ where a.dni=$P{dni}
 	<field name="referencia" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="created_user" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="created_at" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<group name="dni">
 		<groupExpression><![CDATA[$F{dni}]]></groupExpression>
 		<groupHeader>
@@ -218,7 +227,7 @@ where a.dni=$P{dni}
 					<textFieldExpression class="java.lang.String"><![CDATA["Nombre y apellidos:"]]></textFieldExpression>
 				</textField>
 				<image scaleImage="FillFrame" onErrorType="Blank">
-					<reportElement x="393" y="53" width="76" height="92"/>
+					<reportElement x="402" y="55" width="65" height="92"/>
 					<imageExpression class="java.lang.String"><![CDATA[$P{REPORT_URL_IMG}+"img_dni/"+$F{dni}+".png"]]></imageExpression>
 				</image>
 				<textField>
@@ -608,7 +617,7 @@ where a.dni=$P{dni}
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA["Vigente hasta:"]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="134" y="233" width="88" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="10" isBold="false"/>
@@ -643,14 +652,14 @@ where a.dni=$P{dni}
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA["Departamento"]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="110" y="161" width="87" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="9" isBold="false"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{region}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="198" y="161" width="135" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="9" isBold="false"/>
@@ -664,7 +673,7 @@ where a.dni=$P{dni}
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA["Provincia"]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="333" y="161" width="135" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="9" isBold="false"/>
@@ -699,8 +708,58 @@ where a.dni=$P{dni}
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{referencia}]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement mode="Transparent" x="400" y="53" width="69" height="96"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Dotted"/>
+					</graphicElement>
+				</rectangle>
 			</band>
 		</groupHeader>
+		<groupFooter>
+			<band height="120">
+				<textField>
+					<reportElement x="0" y="0" width="469" height="20"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["<b>Nombres de la persona que registró: </b>"+"<i>"+$F{created_user}+"</i>"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="20" width="469" height="20"/>
+					<textElement textAlignment="Justified" verticalAlignment="Middle" markup="html">
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["<b>Fecha: </b><i>"+$F{created_at}+"<i>"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="150" y="100" width="150" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["REGISTRADOR(A)"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="319" y="100" width="150" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font fontName="Arial" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA["RESPONSABLE DE LA OMAPED"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="319" y="99" width="150" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="150" y="99" width="150" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
 	</group>
 	<detail>
 		<band height="50">
@@ -767,6 +826,19 @@ where a.dni=$P{dni}
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="java.lang.String"><![CDATA["http://172.16.18.13/omaped/public/reportes/FICHA_OMAPED_6.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="469" height="50"/>
+				<subreportParameter name="dni">
+					<subreportParameterExpression><![CDATA[$P{dni}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="REPORT_URL_IMG">
+					<subreportParameterExpression><![CDATA[$P{REPORT_URL_IMG}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA["http://172.16.18.13/omaped/public/reportes/FICHA_OMAPED_8.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

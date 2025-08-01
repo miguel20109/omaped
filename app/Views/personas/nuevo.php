@@ -82,7 +82,7 @@ Nueva Persona
                         </div>
                         <div class="form-group col-md-3">
                             <label>Edad</label>
-							<input type="date" id="fechafallecimiento" name="fechafallecimiento" class="form-control" value="" readonly>
+							<input type="text" id="edad" name="edad" class="form-control" value="" readonly>
                         </div>
                 <div class="form-group col-md-4">
                     <label>Departamento(nacimiento)</label>

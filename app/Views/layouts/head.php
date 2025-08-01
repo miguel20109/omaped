@@ -6,7 +6,7 @@
   <meta name="csrf_token" content="<?= csrf_token() ?>">
   <meta name="csrf_hash" content="<?= csrf_hash() ?>">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Plataforma de Cementerio | <?= $this->renderSection('title'); ?></title>
+  <title>Plataforma de OMAPED | <?= $this->renderSection('title'); ?></title>
   <?= $this->include('layouts/styles.php'); ?>
   <link rel='shortcut icon' type='image/x-icon' href='<?= base_url('assets/img/logo_ico.ico'); ?>' />
 </head>

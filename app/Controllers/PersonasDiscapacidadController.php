@@ -224,7 +224,9 @@ class PersonasDiscapacidadController extends BaseController
 					'carnet_vigencia' => $this->request->getVar('carnet_vigencia'),
 					'cuantos_viven' => $this->request->getVar('cuantos_viven'),
 					'sugerencias' => $this->request->getVar('sugerencias'),
-					'limita_trabajo' => $this->request->getVar('limita_trabajo')
+					'limita_trabajo' => $this->request->getVar('limita_trabajo'),
+					'created_user' => $this->session->id_usuario,
+					'updated_user' => $this->session->id_usuario
                 ];
 
                 if ($buscar == '1') {
